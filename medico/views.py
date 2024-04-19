@@ -1,7 +1,9 @@
 from django.shortcuts import render, redirect
-from . models import DadosMedico, Especialidades, is_medico
+from . models import DadosMedico, Especialidades, is_medico, DatasAbertas
 from django.contrib import messages
 from django.contrib.messages import constants
+from django.http import HttpResponse
+from datetime import datetime
 
 # Create your views here.
 def cadastro_medico(request):
@@ -34,3 +36,32 @@ def cadastro_medico(request):
 
     messages.add_message(request, constants.SUCCESS, 'Cadastro médico realizado com sucesso')
     return redirect('/medicos/abrir_horarios')
+
+def abrir_horario(request):
+    if not is_medico(request.user):
+        messages.add_message(request, constants.WARNING, 'Você não é médico(a)')
+        return redirect('/usuarios/logout')
+    
+    if request.method == "GET":
+        dadosMedico = DadosMedico.objects.get(user=request.user)
+        datas_abertas = DatasAbertas.objects.filter(user=request.user)
+        return render(request, 'abrir_horario.html', {'dadosMedico': dadosMedico, 'datas_abertas': datas_abertas})
+    
+    elif request.method == "POST":
+        data = request.POST.get('data')
+        
+        dataFormatada = datetime.strptime(data, '%Y-%m-%dT%H:%M')
+        dataAtual = datetime.now()
+        
+        if dataFormatada <= dataAtual:
+            messages.add_message(request, constants.ERROR, 'Ops...Não tem como agendar para uma data que já passou! Escolha outra data.')
+            return redirect('/medicos/abrir_horario')
+        
+        datasAbertas = DatasAbertas(
+            data=data,
+            user=request.user
+        )
+
+        datasAbertas.save()
+        messages.add_message(request, constants.SUCCESS, 'Horário aberto com sucesso!')
+        return redirect('/medicos/abrir_horario')
