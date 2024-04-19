@@ -25,7 +25,7 @@
                 {% endfor %}
             {% endif %}
             <br>
-            <form action="#" method="post" enctype='multipart/form-data'>
+            <form action="{% url 'cadastro_medico'%}" method="post" enctype='multipart/form-data'> {% csrf_token %}
                 <div class="row">
                     <div class="col-md">
                         <label for="">CRM:</label>
@@ -72,13 +72,13 @@
                 <input type="file" name="foto" id="" class="form-control shadow-main-color">
                 <br>
                 <label for="">Especialidade médica</label>
-                <select name="especialidade" class="form-select" id="">
-                   
-                        <option value="">X</option>
-                    
-                   
 
+                <select name="especialidade" class="form-select" id="">
+                    {% for especialidade in especialidades %}:
+                        <option value="{{especialidade}}">{{especialidade}}</option>
+                    {% endfor %}	
                 </select>
+
                 <br>
                 <label for="">Descrição:</label>
                 <textarea name="descricao" class="form-control shadow-main-color"></textarea>

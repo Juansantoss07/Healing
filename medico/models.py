@@ -1,6 +1,10 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+
+def is_medico(user):
+    return DadosMedico.objects.filter(user = user).exists()
+
 # Create your models here.
 class Especialidades(models.Model):
     nome = models.CharField(max_length=100)
