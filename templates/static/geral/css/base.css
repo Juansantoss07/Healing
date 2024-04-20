@@ -20,4 +20,5 @@
 
 .color-dark{
     color: var(--dark-color);
+    cursor: pointer;
 }

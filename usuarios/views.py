@@ -33,7 +33,8 @@ def cadastro(request):
             password= senha
         )
         
-        return HttpResponse(f'Usuário criado com sucesso.')
+        messages.add_message(request, constants.SUCCESS, 'Cadastro realizado com sucesso')
+        return redirect('/usuarios/login')
 
 
 def login(request):
@@ -47,7 +48,7 @@ def login(request):
         
         if user:
             auth.login(request, user)
-            return redirect('/pacientes/home')
+            return redirect('/paciente/home')
         
         messages.add_message(request, constants.ERROR, 'Username ou senha inválidos')
         return redirect('/usuarios/login')
