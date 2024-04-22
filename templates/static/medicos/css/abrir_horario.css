@@ -3,6 +3,12 @@
     width: 150px;
     height: 150px;
 
-    border-radius: 75px;
+    border-radius: 5px;
 
+}
+
+@media(max-width:768px){
+    li{
+        margin-left:1rem;
+    }
 }

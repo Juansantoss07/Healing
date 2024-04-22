@@ -2,6 +2,14 @@
     font-size: 20px;
 }
 
+.card-docs{
+    padding: 1rem;
+}
+
+.card-docs a{
+    color:#fff;
+}
+
 .card-medicos{
 
     width: calc(50% - 10px);
@@ -19,17 +27,34 @@
     width: 70vw;
 }
 
+@media(max-width:768px){
+    .list-medicos{
+        width: 93vw;
+    }
+
+    .card-medicos{
+        width: 100%;
+    }
+
+    .especialidades {
+        display: flex;
+        gap: 6px;
+        overflow: auto;
+        padding: 1rem 0;
+    }
+}
+
 .foto-perfil-card{
     width: auto;
     height: 170px;
-    border-radius: 10px;
+    border-radius: 5px;
 
 }
 
 .foto-perfil-card-lg{
     width: 180px;
     height: 180px;
-    border-radius: 10px;
+    border-radius: 5px;
 
 }
 .icon-main{

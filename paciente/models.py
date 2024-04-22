@@ -19,3 +19,11 @@ class Consulta(models.Model):
 
     def __str__(self):
         return self.paciente.username
+    
+class Documentos(models.Model):
+    titulo = models.CharField(max_length=100)
+    documento = models.FileField(upload_to='documentos')
+    consulta = models.ForeignKey(Consulta, on_delete=models.DO_NOTHING)
+
+    def __str__(self):  
+        return self.titulo

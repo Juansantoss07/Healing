@@ -7,5 +7,6 @@ urlpatterns = [
     path('agendar_horario/<int:id_data_aberta>', views.agendar_horario, name='agendar_horario'),
     path('minhas_consultas', views.minhas_consultas, name='minhas_consultas'),
     path('consulta/<int:id_consulta>', views.consulta, name='consulta'),
-    path('cancela_consulta/<int:id_consulta>', views.cancela_consulta, name='cancela_consulta')
+    path('cancela_consulta/<int:id_consulta>', views.cancela_consulta, name='cancela_consulta'),
+    path('envia_documentos/<int:id_consulta>', views.envia_documentos, name='envia_documentos' )
 ]

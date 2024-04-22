@@ -64,7 +64,7 @@
                 <hr>
                 <h3 class="p-bold">Detalhes da consulta</h3>
                 <p style="font-size:20px"><i class="bi bi-calendar3 color-dark"></i>&nbsp {{consulta.data_aberta.data}}</p>
-                <a style="cursor: auto;" class="btn btn-dark-color-outline btn-lg">Adicione em seu calendário!</a>
+                <a href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Consulta com {{consulta.paciente}}" target="_blank" style="cursor: auto;" class="btn btn-dark-color-outline btn-lg">Adicione em seu calendário!</a>
                 <hr>
                 <h3 class="p-bold">Como acessar ?</h3>
                 <p>Adicione o link do google meet para iniciar a consulta</p>
@@ -85,7 +85,7 @@
             </div>
             <div class="col-md">
                 <h3 class="p-bold">Documentos do paciente</h3>
-                <form action="" method="POST" enctype="multipart/form-data">
+                <form action="{% url "envia_documentos" consulta.id %}" method="POST" enctype="multipart/form-data"> {% csrf_token %}
                     <input type="text" name="titulo" class="form-control" placeholder="Titulo ...">
                     <br>
                     <input type="file" name="documento" class="form-control">
@@ -94,7 +94,11 @@
                 </form>
                 <hr>
                 <br>
-                
+                {% for documento in documentos %}
+                    <span class="badge bg-secondary card-docs">
+                        <a href='/media/{{ documento.documento }}' target="_blank">{{ documento }}</a>
+                    </span>
+                {% endfor %}
                 <hr>
                 <a href="{% url "finalizar_consulta" consulta.id %}" class="btn btn-primary">Finalizar consulta</a>
             </div>

@@ -3,7 +3,7 @@ from medico.models import DadosMedico, Especialidades, DatasAbertas, is_medico
 from django.contrib.auth.models import User
 from datetime import datetime
 from django.http import HttpResponse
-from .models import Consulta
+from .models import Consulta, Documentos
 from django.contrib import messages
 from django.contrib.messages import constants
 
@@ -66,7 +66,8 @@ def consulta(request, id_consulta):
     if request.method == "GET":
         consulta = Consulta.objects.get(id=id_consulta)
         dado_medico = DadosMedico.objects.get(user=consulta.data_aberta.user)
-        return render(request, 'consulta.html', {'consulta':consulta, 'dado_medico':dado_medico, 'is_medico':is_medico(request.user)})
+        documentos = Documentos.objects.filter(consulta__id=id_consulta)
+        return render(request, 'consulta.html', {'consulta':consulta, 'dado_medico':dado_medico, 'is_medico':is_medico(request.user), 'documentos':documentos})
     
 
 def cancela_consulta(request, id_consulta):
@@ -82,3 +83,23 @@ def cancela_consulta(request, id_consulta):
 
         messages.add_message(request, constants.SUCCESS, 'Consulta cancelada com sucesso!')
         return redirect('/paciente/consulta/' + str(id_consulta))   
+    
+
+def envia_documentos(request, id_consulta):
+    if not is_medico:
+        messages.add_message(request, constants.WARNING, 'Você não é médico(a)')
+        return redirect('/paciente/home')
+    
+    titulo = request.POST.get('titulo')
+    documento = request.FILES.get('documento')
+    consulta = Consulta.objects.get(id=id_consulta)
+
+    documentos = Documentos(
+        titulo=titulo,
+        documento=documento,
+        consulta_id=consulta.id
+    )
+
+    documentos.save()
+    messages.add_message(request, constants.SUCCESS, 'Documento(s) adicionado(s) com sucesso!')
+    return redirect('/medico/consulta_area_medico/' + str(consulta.id))

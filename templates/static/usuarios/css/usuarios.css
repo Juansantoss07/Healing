@@ -41,3 +41,12 @@
     color: white;
     border: 1px solid var(--dark-color);
 }
+
+@media(max-width:768px){
+    .bg-main {
+        display: none !important;
+    }
+    .cont-cadastro {
+        width: 100%;
+    }
+}

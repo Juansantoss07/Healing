@@ -39,6 +39,8 @@ def cadastro(request):
 
 def login(request):
     if request.method == "GET":
+        if request.user.is_authenticated:
+            return redirect('/paciente/home')
         return render(request, 'login.html')
     if request.method == "POST":
         username = request.POST.get('username')

@@ -4,7 +4,7 @@ from django.contrib import messages
 from django.contrib.messages import constants
 from django.http import HttpResponse
 from datetime import datetime, timedelta
-from paciente.models import Consulta
+from paciente.models import Consulta, Documentos
 
 
 # Create your views here.
@@ -77,7 +77,7 @@ def consultas_medico(request):
         hoje = datetime.now()
 
         consultas_hoje = Consulta.objects.filter(data_aberta__user=request.user).filter(data_aberta__data__gte=hoje).filter(data_aberta__data__lt=hoje + timedelta(days=1))
-        consultas_restantes = Consulta.objects.exclude(id__in=consultas_hoje.values('id'))
+        consultas_restantes = Consulta.objects.exclude(id__in=consultas_hoje.values('id')).filter(data_aberta__user=request.user)
 
         filtro_consultas = request.GET.get('nome')
         filtro_consultas_data = request.GET.get('data')
@@ -95,9 +95,11 @@ def consulta_area_medico(request, id_consulta):
         messages.add_message(request, constants.WARNING, 'Você não é médico(a)')
         return redirect('/usuarios/logout')
     
+    documentos = Documentos.objects.filter(consulta__id=id_consulta)
+    
     if request.method == "GET":
         consulta = Consulta.objects.get(id=id_consulta)
-        return render(request, 'consulta_area_medico.html', {'is_medico':is_medico(request.user), 'consulta':consulta   })
+        return render(request, 'consulta_area_medico.html', {'is_medico':is_medico(request.user), 'consulta':consulta, 'documentos':documentos   })
     
     elif request.method == "POST":
         consulta = Consulta.objects.get(id=id_consulta)
